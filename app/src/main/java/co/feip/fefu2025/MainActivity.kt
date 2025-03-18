@@ -1,47 +1,93 @@
 package co.feip.fefu2025
-
+import android.graphics.Color
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import co.feip.fefu2025.ui.theme.FEFU2025AndroidBaseRepoTheme
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var myFlexLayout: MyFlexBoxLayout
+    private lateinit var btnAdd: Button
+
+    private val languages = listOf(
+        "C++",
+        "C",
+        "Kotlin",
+        "Java",
+        "Go",
+        "Python",
+        "C#",
+        "JS",
+        "PHP",
+        "R",
+        "SQL",
+        "Swift",
+        "Perl",
+        "ASM",
+        "VB",
+        "Ruby",
+        "ObjC",
+        "Rust",
+        "D",
+        "Dart",
+        "COBOL",
+        "Julia",
+        "Scala",
+        "Scheme",
+        "Ada",
+        "Lisp",
+        "Apex",
+        "Lua",
+        "Fortran",
+        "Haskell",
+        "TS",
+        "Algol",
+        "Bash",
+        "Carbon",
+        "Curl",
+        "Elixir",
+        "F#",
+        "ML",
+        "OCaml",
+        "OpenCL",
+        "Zig",
+        "Hello World!"
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            FEFU2025AndroidBaseRepoTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "FEIP",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+        setContentView(R.layout.activity_main)
+
+        myFlexLayout = findViewById(R.id.myFlexLayout)
+        btnAdd = findViewById(R.id.btnAdd)
+
+        btnAdd.setOnClickListener {
+            addRandomLanguageView()
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    private fun addRandomLanguageView() {
+        val langName = languages.random()
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FEFU2025AndroidBaseRepoTheme {
-        Greeting("Android")
+        val circleColor = getRandomColor()
+
+        val randomPercent = Random.nextDouble(0.0, 100.0).toFloat()
+
+        val itemView = LanguageItemView(this).apply {
+            setLanguageName(langName)
+            setCircleColor(circleColor)
+            setUsagePercent(randomPercent)
+        }
+
+        myFlexLayout.addView(itemView)
+    }
+
+    private fun getRandomColor(): Int {
+        val red = (0..255).random()
+        val green = (0..255).random()
+        val blue = (0..255).random()
+        return Color.rgb(red, green, blue)
     }
 }
+
