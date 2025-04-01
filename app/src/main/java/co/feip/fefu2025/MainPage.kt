@@ -45,27 +45,27 @@ fun MainPage(
                 onActiveChange = { active = it },
                 placeholder = { Text("Search repositories...") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
             ) {
                 if (searchQuery.isNotEmpty()) {
                     Text(
                         text = "Results for '$searchQuery'",
-                        modifier = Modifier.padding(16.dp)
+                        modifier = modifier.padding(16.dp)
                     )
                 } else {
                     Text(
                         text = "Recently requests",
-                        modifier = Modifier.padding(16.dp)
+                        modifier = modifier.padding(16.dp)
                     )
                 }
             }
         }
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
+        Column(modifier = modifier.padding(innerPadding)) {
             LazyColumn(
-                modifier = Modifier.padding(12.dp),
+                modifier = modifier.padding(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 item {
@@ -99,7 +99,6 @@ fun MainPage(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun MainPagePreview() {
@@ -132,7 +131,6 @@ fun MainPagePreview() {
         )
     }
     FEFU2025AndroidBaseRepoTheme {
-
         MainPage(myStarsRepoCards, allProjectsRepoCards, modifier = Modifier)
     }
 }

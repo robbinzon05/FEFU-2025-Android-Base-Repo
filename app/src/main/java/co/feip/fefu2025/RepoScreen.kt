@@ -21,28 +21,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import co.feip.fefu2025.ui.theme.FEFU2025AndroidBaseRepoTheme
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
-
-val languagesColor = mapOf(
-    "C++" to Color(0xFFF34B7D),
-    "Python" to Color(0xFF3572A5),
-    "Ruby" to Color(0xFF701516),
-    "JavaScript" to Color(0xFFF1E05A),
-    "Kotlin" to Color(0xFFA97BFF),
-    "C" to Color(0xFF555555),
-    "Haskell" to Color(0xFF5E5086),
-    "Swift" to Color(0xFFF05138),
-    "Rust" to Color(0xFFDEA584)
-)
-
 
 data class LanguageData(
     val name: String,
     val percent: Float,
     val color: Long
 )
-
 
 @Composable
 fun RepoScreen(
