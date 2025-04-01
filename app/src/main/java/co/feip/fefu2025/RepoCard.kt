@@ -29,18 +29,20 @@ data class CardInfo (
 )
 
 @Composable
-fun RepoCard(cardInfo: CardInfo) {
+fun RepoCard(cardInfo: CardInfo, modifier: Modifier = Modifier) {
     Card(modifier = cardInfo.modifier) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = modifier
+            .padding(16.dp)
+            .width(300.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     painter = painterResource(cardInfo.icon),
                     contentDescription = "Repository icon",
-                    modifier = Modifier.size(60.dp)
+                    modifier = modifier.size(60.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = modifier.width(8.dp))
                 Column {
                     Text(
                         text = cardInfo.name,
@@ -53,26 +55,26 @@ fun RepoCard(cardInfo: CardInfo) {
                         Icon(
                             painter = painterResource(id = R.drawable.git_fork_svgrepo_com),
                             contentDescription = "Forks",
-                            modifier = Modifier.size(20.dp)
+                            modifier = modifier.size(20.dp)
                         )
                         Text(
                             text = cardInfo.forks.toString(),
-                            modifier = Modifier.padding(start = 4.dp)
+                            modifier = modifier.padding(start = 4.dp)
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = modifier.width(8.dp))
                         Icon(
                             painter = painterResource(id = R.drawable.star_svgrepo_com),
                             contentDescription = "Stars",
-                            modifier = Modifier.size(20.dp)
+                            modifier = modifier.size(20.dp)
                         )
                         Text(
                             text = cardInfo.stars.toString(),
-                            modifier = Modifier.padding(start = 4.dp)
+                            modifier = modifier.padding(start = 4.dp)
                         )
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = modifier.height(8.dp))
             Text(
                 text = cardInfo.description,
                 style = MaterialTheme.typography.bodyMedium

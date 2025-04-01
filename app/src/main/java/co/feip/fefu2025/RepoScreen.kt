@@ -20,24 +20,35 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import co.feip.fefu2025.ui.theme.FEFU2025AndroidBaseRepoTheme
-import android.graphics.Color
 import androidx.compose.foundation.layout.fillMaxWidth
-import kotlin.random.Random
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
 
-val languages = listOf(
-    "C++",
-    "Python",
-    "Ruby",
-    "JavaScript",
-    "Kotlin",
-    "C",
-    "Haskell",
-    "Swift",
-    "Rust"
+val languagesColor = mapOf(
+    "C++" to Color(0xFFF34B7D),
+    "Python" to Color(0xFF3572A5),
+    "Ruby" to Color(0xFF701516),
+    "JavaScript" to Color(0xFFF1E05A),
+    "Kotlin" to Color(0xFFA97BFF),
+    "C" to Color(0xFF555555),
+    "Haskell" to Color(0xFF5E5086),
+    "Swift" to Color(0xFFF05138),
+    "Rust" to Color(0xFFDEA584)
 )
 
+
+data class LanguageData(
+    val name: String,
+    val percent: Float,
+    val color: Long
+)
+
+
 @Composable
-fun RepoScreen(cardInfo: CardInfo) {
+fun RepoScreen(
+    cardInfo: CardInfo,
+    languages: List<LanguageData>
+) {
     Box(modifier = cardInfo.modifier) {
         Column(modifier = cardInfo.modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -85,17 +96,21 @@ fun RepoScreen(cardInfo: CardInfo) {
             Text(
                 text = "Languages:",
                 style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.W300,
-                fontStyle = FontStyle.Italic
+                fontWeight = FontWeight.W900,
+                fontSize = 15.sp
+            )
+            LanguageLine(
+                languages = languages,
+                modifier = Modifier
             )
             AndroidView(
                 factory = { context ->
                     MyFlexBoxLayout(context).apply {
                         for (lang in languages) {
-                            val circleColor = getRandomColor()
-                            val usagePercent = Random.nextDouble(0.0, 100.0).toFloat()
+                            val circleColor = lang.color
+                            val usagePercent = lang.percent
                             val itemView = LanguageItemView(context).apply {
-                                setLanguageName(lang)
+                                setLanguageName(lang.name)
                                 setCircleColor(circleColor)
                                 setUsagePercent(usagePercent)
                             }
@@ -107,14 +122,6 @@ fun RepoScreen(cardInfo: CardInfo) {
             )
         }
     }
-}
-
-fun getRandomColor(): Int {
-    val red = (0..255).random()
-    val green = (0..255).random()
-    val blue = (0..255).random()
-
-    return Color.rgb(red,green, blue)
 }
 
 @Preview(showBackground = true)
@@ -133,6 +140,11 @@ fun Preview() {
                 stars= 5407,
                 icon = R.drawable.ic_launcher_foreground,
                 modifier = Modifier
+            ),
+            languages = listOf<LanguageData>(
+                LanguageData("Python",57f, 0xFF3572A5),
+                LanguageData("Rust",30f, 0xFFDEA584),
+                LanguageData("C++",13f, 0xFFF34B7D)
             )
         )
     }
