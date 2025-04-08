@@ -1,9 +1,10 @@
-package co.feip.fefu2025
+package co.feip.fefu2025.presentation.components
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import co.feip.fefu2025.R
 
 class LanguageItemView @JvmOverloads constructor(
     context: Context,

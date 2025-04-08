@@ -17,7 +17,7 @@
         android:layout_weight="1"
         android:layout_marginTop="16dp">
 
-        <co.feip.fefu2025.MyFlexBoxLayout
+        <co.feip.fefu2025.presentation.components.MyFlexBoxLayout
             android:id="@+id/myFlexLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

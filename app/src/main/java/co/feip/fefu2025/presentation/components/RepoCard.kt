@@ -1,4 +1,4 @@
-package co.feip.fefu2025
+package co.feip.fefu2025.presentation.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.feip.fefu2025.R
+import co.feip.fefu2025.domain.model.RepoCardModel
 import co.feip.fefu2025.ui.theme.FEFU2025AndroidBaseRepoTheme
 
 data class CardInfo (
@@ -29,8 +31,8 @@ data class CardInfo (
 )
 
 @Composable
-fun RepoCard(cardInfo: CardInfo, modifier: Modifier = Modifier) {
-    Card(modifier = cardInfo.modifier) {
+fun RepoCard(cardInfo: RepoCardModel, modifier: Modifier = Modifier) {
+    Card(modifier = modifier) {
         Column(modifier = modifier
             .padding(16.dp)
             .width(300.dp)) {
@@ -88,7 +90,7 @@ fun RepoCard(cardInfo: CardInfo, modifier: Modifier = Modifier) {
 fun PreviewCard() {
     FEFU2025AndroidBaseRepoTheme {
         RepoCard(
-            cardInfo = CardInfo(
+            cardInfo = RepoCardModel(
                 name = "ExampleGitLab.org/GitLab Community",
                 description = "GitLab Community Edition (CE) is a" +
                         "n open source end-to-end software developm" +
@@ -97,8 +99,7 @@ fun PreviewCard() {
                         " Self-host GitLab CE on your own servers, in a container, or on a cloud provider",
                 forks = 4774,
                 stars = 5407,
-                icon = R.drawable.ic_launcher_foreground,
-                modifier = Modifier
+                icon = R.drawable.ic_launcher_foreground
             )
         )
     }
