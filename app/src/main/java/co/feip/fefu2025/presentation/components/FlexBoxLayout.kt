@@ -1,4 +1,4 @@
-package co.feip.fefu2025
+package co.feip.fefu2025.presentation.components
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup

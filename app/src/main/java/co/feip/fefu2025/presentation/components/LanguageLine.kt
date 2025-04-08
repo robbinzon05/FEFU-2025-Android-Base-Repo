@@ -1,4 +1,4 @@
-package co.feip.fefu2025
+package co.feip.fefu2025.presentation.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
@@ -14,11 +14,12 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.feip.fefu2025.domain.model.LanguageModel
 import co.feip.fefu2025.ui.theme.FEFU2025AndroidBaseRepoTheme
 
 @Composable
 fun LanguageLine(
-    languages: List<LanguageData>,
+    languages: List<LanguageModel>,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -53,10 +54,10 @@ fun LanguageLine(
 @Composable
 fun LanguageLinePreview() {
     FEFU2025AndroidBaseRepoTheme {
-        val languages = listOf<LanguageData>(
-            LanguageData("Python",57f, 0xFF3572A5),
-            LanguageData("Rust",30f, 0xFFDEA584),
-            LanguageData("C++",13f, 0xFFF34B7D)
+        val languages = listOf<LanguageModel>(
+            LanguageModel("Python",57f, 0xFF3572A5),
+            LanguageModel("Rust",30f, 0xFFDEA584),
+            LanguageModel("C++",13f, 0xFFF34B7D)
         )
         LanguageLine(
             languages = languages,
