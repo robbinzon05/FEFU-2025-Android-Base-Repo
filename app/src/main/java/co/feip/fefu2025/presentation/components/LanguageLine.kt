@@ -19,8 +19,8 @@ import co.feip.fefu2025.ui.theme.FEFU2025AndroidBaseRepoTheme
 
 @Composable
 fun LanguageLine(
-    languages: List<LanguageModel>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    languages: List<LanguageModel>
 ) {
     Box(
         modifier = modifier
@@ -52,7 +52,7 @@ fun LanguageLine(
 
 @Preview (showBackground = true)
 @Composable
-fun LanguageLinePreview() {
+private fun LanguageLinePreview() {
     FEFU2025AndroidBaseRepoTheme {
         val languages = listOf<LanguageModel>(
             LanguageModel("Python",57f, 0xFF3572A5),
@@ -60,8 +60,8 @@ fun LanguageLinePreview() {
             LanguageModel("C++",13f, 0xFFF34B7D)
         )
         LanguageLine(
-            languages = languages,
-            modifier = Modifier
+            modifier = Modifier,
+            languages = languages
         )
     }
 }

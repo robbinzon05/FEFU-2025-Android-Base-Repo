@@ -2,18 +2,19 @@ package co.feip.fefu2025.data.mock
 
 import co.feip.fefu2025.R
 import co.feip.fefu2025.domain.model.LanguageModel
-import co.feip.fefu2025.domain.model.RepoCardModel
-import co.feip.fefu2025.domain.model.RepoScreenModel
+import co.feip.fefu2025.domain.model.RepositoryCardModel
+import co.feip.fefu2025.domain.model.RepositoryScreenModel
 
 class DataProvider {
-    fun getRepoScreen(): RepoScreenModel {
-        return RepoScreenModel(
+    fun getRepositoryScreen(): RepositoryScreenModel {
+        return RepositoryScreenModel(
             name = "ExampleGitLab.org/GitLab Community",
             description = "GitLab Community Edition (CE) is a" +
                     "n open source end-to-end software developm" +
                     "ent platform with built-in version control, " +
                     "issue tracking, code review, CI/CD, and more." +
                     " Self-host GitLab CE on your own servers, in a container, or on a cloud provider",
+            dataCreate = "2025-03-25",
             forks = 4774,
             stars= 5407,
             icon = R.drawable.ic_launcher_foreground,
@@ -24,9 +25,10 @@ class DataProvider {
             )
         )
     }
-    fun getStarredCards(): List<RepoCardModel> {
-        return List<RepoCardModel>(10) {
-            RepoCardModel(
+
+    fun getStarredCards(): List<RepositoryCardModel> {
+        return List<RepositoryCardModel>(10) {
+            RepositoryCardModel(
                 name = "ExampleGitLab.org/GitLab Community",
                 description = "GitLab Community Edition (CE) is a" +
                         "n open source end-to-end software developm" +
@@ -40,9 +42,9 @@ class DataProvider {
         }
     }
 
-    fun getAllCards(): List<RepoCardModel> {
-        return List<RepoCardModel>(20){
-            RepoCardModel(
+    fun getAllCards(): List<RepositoryCardModel> {
+        return List<RepositoryCardModel>(20){
+            RepositoryCardModel(
                 name = "ExampleGitLab.org/GitLab Community",
                 description = "GitLab Community Edition (CE) is a" +
                         "n open source end-to-end software developm" +

@@ -27,8 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import co.feip.fefu2025.R
-import co.feip.fefu2025.domain.model.RepoCardModel
-import co.feip.fefu2025.presentation.components.RepoCard
+import co.feip.fefu2025.domain.model.RepositoryCardModel
+import co.feip.fefu2025.presentation.components.RepositoryCard
 import co.feip.fefu2025.ui.theme.FEFU2025AndroidBaseRepoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,6 +39,7 @@ fun MainPageContent(
     onSearchQueryChange: (String) -> Unit,
     active: Boolean,
     onActiveChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     if (state.isLoading) {
         CircularProgressIndicator()
@@ -46,6 +47,9 @@ fun MainPageContent(
         Scaffold(
             topBar = {
                 SearchBar(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
                     query = searchQuery,
                     onQueryChange = onSearchQueryChange,
                     onSearch = { onActiveChange(false) },
@@ -53,27 +57,24 @@ fun MainPageContent(
                     onActiveChange = onActiveChange,
                     placeholder = { Text("Search repositories...") },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
                 ) {
                     if (searchQuery.isNotEmpty()) {
                         Text(
-                            text = "Results for '$searchQuery'",
-                            modifier = Modifier.padding(16.dp)
+                            modifier = modifier.padding(16.dp),
+                            text = "Results for '$searchQuery'"
                         )
                     } else {
                         Text(
-                            text = "Recently requests",
-                            modifier = Modifier.padding(16.dp)
+                            modifier = modifier.padding(16.dp),
+                            text = "Recently requests"
                         )
                     }
                 }
             }
         ) { innerPadding ->
-            Column(modifier = Modifier.padding(innerPadding)) {
+            Column(modifier = modifier.padding(innerPadding)) {
                 LazyColumn(
-                    modifier = Modifier.padding(12.dp),
+                    modifier = modifier.padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     item {
@@ -86,7 +87,7 @@ fun MainPageContent(
                     item {
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             items(state.starredRepositories) { cardInfo ->
-                                RepoCard(cardInfo = cardInfo)
+                                RepositoryCard(cardInfo = cardInfo)
                             }
                         }
                     }
@@ -98,7 +99,7 @@ fun MainPageContent(
                         )
                     }
                     items(state.allRepositories) { cardInfo ->
-                        RepoCard(cardInfo = cardInfo)
+                        RepositoryCard(cardInfo = cardInfo)
                     }
                 }
             }
@@ -119,6 +120,7 @@ fun MainPage(viewModel: MainPageViewModel) {
         onSearchQueryChange = { searchQuery = it },
         active = active,
         onActiveChange = { active = it },
+        modifier = Modifier
     )
 }
 
@@ -127,8 +129,8 @@ fun MainPage(viewModel: MainPageViewModel) {
 fun MainPagePreview() {
     FEFU2025AndroidBaseRepoTheme {
         val previewState = MainUIState(
-            starredRepositories = List<RepoCardModel>(10) {
-                RepoCardModel(
+            starredRepositories = List<RepositoryCardModel>(10) {
+                RepositoryCardModel(
                     name = "ExampleGitLab.org/GitLab Community",
                     description = "GitLab Community Edition (CE) is a" +
                             "n open source end-to-end software developm" +
@@ -140,8 +142,8 @@ fun MainPagePreview() {
                     icon = R.drawable.ic_launcher_foreground
                 )
             },
-            allRepositories = List<RepoCardModel>(20) {
-                RepoCardModel(
+            allRepositories = List<RepositoryCardModel>(20) {
+                RepositoryCardModel(
                     name = "ExampleGitLab.org/GitLab Community",
                     description = "GitLab Community Edition (CE) is a" +
                             "n open source end-to-end software developm" +
@@ -161,6 +163,7 @@ fun MainPagePreview() {
             onSearchQueryChange = {},
             active = false,
             onActiveChange = {},
+            modifier = Modifier
         )
     }
 }
