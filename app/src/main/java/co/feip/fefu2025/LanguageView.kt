@@ -4,7 +4,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.annotation.ColorInt
 
 class LanguageItemView @JvmOverloads constructor(
     context: Context,
@@ -30,8 +29,9 @@ class LanguageItemView @JvmOverloads constructor(
         tvLanguageName.text = name
     }
 
-    fun setCircleColor(@ColorInt color: Int) {
-        colorCircle.background.setTint(color)
+    fun setCircleColor(hexColor: Long) {
+        val colorInt = hexColor.toInt()
+        colorCircle.background.setTint(colorInt)
     }
 
     fun setUsagePercent(percent: Float) {

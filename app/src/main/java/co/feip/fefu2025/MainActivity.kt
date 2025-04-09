@@ -15,20 +15,7 @@ class MainActivity : ComponentActivity() {
                 Surface (
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    RepoScreen(
-                        cardInfo = CardInfo(
-                            name = "ExampleGitLab.org/GitLab Community",
-                            description = "GitLab Community Edition (CE) is a" +
-                                    "n open source end-to-end software developm" +
-                                    "ent platform with built-in version control, " +
-                                    "issue tracking, code review, CI/CD, and more." +
-                                    " Self-host GitLab CE on your own servers, in a container, or on a cloud provider",
-                            forks = 4774,
-                            stars= 5407,
-                            icon = R.drawable.ic_launcher_foreground,
-                            modifier = Modifier
-                        )
-                    )
+                    MainPagePreview()
                 }
             }
         }
