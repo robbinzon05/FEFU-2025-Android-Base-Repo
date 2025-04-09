@@ -29,7 +29,7 @@ data class CardInfo (
 )
 
 @Composable
-fun RepoCard(cardInfo: CardInfo, modifier: Modifier = Modifier) {
+fun RepositoryCard(cardInfo: CardInfo, modifier: Modifier = Modifier) {
     Card(modifier = cardInfo.modifier) {
         Column(modifier = modifier
             .padding(16.dp)
@@ -38,9 +38,9 @@ fun RepoCard(cardInfo: CardInfo, modifier: Modifier = Modifier) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
+                    modifier = modifier.size(60.dp),
                     painter = painterResource(cardInfo.icon),
-                    contentDescription = "Repository icon",
-                    modifier = modifier.size(60.dp)
+                    contentDescription = null
                 )
                 Spacer(modifier = modifier.width(8.dp))
                 Column {
@@ -53,23 +53,23 @@ fun RepoCard(cardInfo: CardInfo, modifier: Modifier = Modifier) {
                         horizontalArrangement = Arrangement.Start
                     ) {
                         Icon(
+                            modifier = modifier.size(20.dp),
                             painter = painterResource(id = R.drawable.git_fork_svgrepo_com),
-                            contentDescription = "Forks",
-                            modifier = modifier.size(20.dp)
+                            contentDescription = null
                         )
                         Text(
-                            text = cardInfo.forks.toString(),
-                            modifier = modifier.padding(start = 4.dp)
+                            modifier = modifier.padding(start = 4.dp),
+                            text = cardInfo.forks.toString()
                         )
                         Spacer(modifier = modifier.width(8.dp))
                         Icon(
+                            modifier = modifier.size(20.dp),
                             painter = painterResource(id = R.drawable.star_svgrepo_com),
-                            contentDescription = "Stars",
-                            modifier = modifier.size(20.dp)
+                            contentDescription = null
                         )
                         Text(
-                            text = cardInfo.stars.toString(),
-                            modifier = modifier.padding(start = 4.dp)
+                            modifier = modifier.padding(start = 4.dp),
+                            text = cardInfo.stars.toString()
                         )
                     }
                 }
@@ -85,10 +85,11 @@ fun RepoCard(cardInfo: CardInfo, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewCard() {
+private fun PreviewRepositoryCard() {
     FEFU2025AndroidBaseRepoTheme {
-        RepoCard(
+        RepositoryCard(
             cardInfo = CardInfo(
+                modifier = Modifier,
                 name = "ExampleGitLab.org/GitLab Community",
                 description = "GitLab Community Edition (CE) is a" +
                         "n open source end-to-end software developm" +
@@ -97,8 +98,7 @@ fun PreviewCard() {
                         " Self-host GitLab CE on your own servers, in a container, or on a cloud provider",
                 forks = 4774,
                 stars = 5407,
-                icon = R.drawable.ic_launcher_foreground,
-                modifier = Modifier
+                icon = R.drawable.ic_launcher_foreground
             )
         )
     }

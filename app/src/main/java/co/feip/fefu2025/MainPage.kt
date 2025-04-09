@@ -38,6 +38,9 @@ fun MainPage(
     Scaffold(
         topBar = {
             SearchBar(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 query = searchQuery,
                 onQueryChange = { searchQuery = it },
                 onSearch = { active = false },
@@ -45,19 +48,16 @@ fun MainPage(
                 onActiveChange = { active = it },
                 placeholder = { Text("Search repositories...") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
             ) {
                 if (searchQuery.isNotEmpty()) {
                     Text(
-                        text = "Results for '$searchQuery'",
-                        modifier = modifier.padding(16.dp)
+                        modifier = modifier.padding(16.dp),
+                        text = "Results for '$searchQuery'"
                     )
                 } else {
                     Text(
-                        text = "Recently requests",
-                        modifier = modifier.padding(16.dp)
+                        modifier = modifier.padding(16.dp),
+                        text = "Recently requests"
                     )
                 }
             }
@@ -80,7 +80,7 @@ fun MainPage(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ){
                         items(myStarsRepoCards) { cardInfo ->
-                            RepoCard(cardInfo = cardInfo)
+                            RepositoryCard(cardInfo = cardInfo)
                         }
                     }
                 }
@@ -92,7 +92,7 @@ fun MainPage(
                     )
                 }
                 items(allProjectsRepoCards) { cardInfo ->
-                    RepoCard(cardInfo = cardInfo)
+                    RepositoryCard(cardInfo = cardInfo)
                 }
             }
         }
