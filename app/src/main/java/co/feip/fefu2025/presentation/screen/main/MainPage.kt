@@ -2,6 +2,7 @@ package co.feip.fefu2025.presentation.screen.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -72,7 +73,8 @@ fun MainPageContent(
                 }
             }
         ) { innerPadding ->
-            Column(modifier = modifier.padding(innerPadding)) {
+            Column(modifier = modifier.padding(innerPadding)
+                .fillMaxSize()) {
                 LazyColumn(
                     modifier = modifier.padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
