@@ -1,14 +1,14 @@
 package co.feip.fefu2025
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import co.feip.fefu2025.presentation.screen.main.MainPage
-import co.feip.fefu2025.presentation.screen.main.MainPageViewModel
+import androidx.navigation.compose.rememberNavController
+import co.feip.fefu2025.navigation.AppNavHost
 import co.feip.fefu2025.ui.theme.FEFU2025AndroidBaseRepoTheme
-import org.koin.androidx.compose.getViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,8 +18,11 @@ class MainActivity : ComponentActivity() {
                 Surface (
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    val viewModel : MainPageViewModel = getViewModel()
-                    MainPage(viewModel = viewModel)
+                    val navController = rememberNavController()
+                    AppNavHost(
+                        navHostController = navController,
+                        modifier = Modifier
+                    )
                 }
             }
         }

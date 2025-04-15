@@ -1,5 +1,6 @@
 package co.feip.fefu2025.presentation.screen.main
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,6 +41,8 @@ fun MainPageContent(
     onSearchQueryChange: (String) -> Unit,
     active: Boolean,
     onActiveChange: (Boolean) -> Unit,
+    onRepoClick: (Int) -> Unit,
+    onStarredClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (state.isLoading) {
@@ -73,7 +76,8 @@ fun MainPageContent(
                 }
             }
         ) { innerPadding ->
-            Column(modifier = modifier.padding(innerPadding)
+            Column(modifier = modifier
+                .padding(innerPadding)
                 .fillMaxSize()) {
                 LazyColumn(
                     modifier = modifier.padding(12.dp),
@@ -81,6 +85,7 @@ fun MainPageContent(
                 ) {
                     item {
                         Text(
+                            modifier = modifier.clickable { onStarredClick() },
                             text = "My stars",
                             fontWeight = FontWeight.Bold,
                             fontSize = 21.sp
@@ -89,7 +94,10 @@ fun MainPageContent(
                     item {
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             items(state.starredRepositories) { cardInfo ->
-                                RepositoryCard(cardInfo = cardInfo)
+                                RepositoryCard(
+                                    cardInfo = cardInfo,
+                                    onClick = { onRepoClick(cardInfo.id) }
+                                )
                             }
                         }
                     }
@@ -101,7 +109,10 @@ fun MainPageContent(
                         )
                     }
                     items(state.allRepositories) { cardInfo ->
-                        RepositoryCard(cardInfo = cardInfo)
+                        RepositoryCard(
+                            cardInfo = cardInfo,
+                            onClick = { onRepoClick(cardInfo.id) }
+                        )
                     }
                 }
             }
@@ -110,29 +121,39 @@ fun MainPageContent(
 }
 
 @Composable
-fun MainPage(viewModel: MainPageViewModel) {
+fun MainPage(
+    viewModel: MainPageViewModel,
+    onRepoClick: (Int) -> Unit,
+    onStarredClick: () -> Unit
+) {
     val state by viewModel.uiState.collectAsState()
 
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var active by rememberSaveable { mutableStateOf(false) }
 
     MainPageContent(
+        modifier = Modifier,
         state = state,
         searchQuery = searchQuery,
         onSearchQueryChange = { searchQuery = it },
         active = active,
         onActiveChange = { active = it },
-        modifier = Modifier
+        onRepoClick = onRepoClick,
+        onStarredClick = onStarredClick
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun MainPagePreview() {
+private fun MainPagePreview() {
+    val onRepoClick: (Int) -> Unit = { id -> println("Clicked repo with id = $id") }
+    val onStarredClick = {}
+
     FEFU2025AndroidBaseRepoTheme {
         val previewState = MainUIState(
-            starredRepositories = List<RepositoryCardModel>(10) {
+            starredRepositories = List<RepositoryCardModel>(10) { index ->
                 RepositoryCardModel(
+                    id = index,
                     name = "ExampleGitLab.org/GitLab Community",
                     description = "GitLab Community Edition (CE) is a" +
                             "n open source end-to-end software developm" +
@@ -144,8 +165,9 @@ fun MainPagePreview() {
                     icon = R.drawable.ic_launcher_foreground
                 )
             },
-            allRepositories = List<RepositoryCardModel>(20) {
+            allRepositories = List<RepositoryCardModel>(20) { index ->
                 RepositoryCardModel(
+                    id = index,
                     name = "ExampleGitLab.org/GitLab Community",
                     description = "GitLab Community Edition (CE) is a" +
                             "n open source end-to-end software developm" +
@@ -160,12 +182,14 @@ fun MainPagePreview() {
             isLoading = false
         )
         MainPageContent(
+            modifier = Modifier,
             state = previewState,
             searchQuery = "",
             onSearchQueryChange = {},
             active = false,
             onActiveChange = {},
-            modifier = Modifier
+            onRepoClick = onRepoClick,
+            onStarredClick = onStarredClick
         )
     }
 }

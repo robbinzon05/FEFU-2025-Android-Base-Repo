@@ -1,4 +1,5 @@
 package co.feip.fefu2025.presentation.components
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,8 +23,14 @@ import co.feip.fefu2025.domain.model.RepositoryCardModel
 import co.feip.fefu2025.ui.theme.FEFU2025AndroidBaseRepoTheme
 
 @Composable
-fun RepositoryCard(cardInfo: RepositoryCardModel, modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
+fun RepositoryCard(
+    modifier: Modifier = Modifier,
+    cardInfo: RepositoryCardModel,
+    onClick: () -> Unit = {}
+) {
+    Card(
+        modifier = modifier.clickable { onClick() }
+    ) {
         Column(modifier = modifier
             .padding(16.dp)
             .width(300.dp)) {
@@ -82,6 +89,7 @@ private fun PreviewRepositoryCard() {
     FEFU2025AndroidBaseRepoTheme {
         RepositoryCard(
             cardInfo = RepositoryCardModel(
+                id = 0,
                 name = "ExampleGitLab.org/GitLab Community",
                 description = "GitLab Community Edition (CE) is a" +
                         "n open source end-to-end software developm" +

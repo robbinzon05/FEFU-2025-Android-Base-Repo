@@ -13,7 +13,8 @@ data class RepositoryScreenUiState(
 )
 
 class RepositoryScreenViewModel(
-    private val getRepositoryScreenUseCase: GetRepositoryScreenUseCase
+    private val getRepositoryScreenUseCase: GetRepositoryScreenUseCase,
+    private val cardId: Int
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RepositoryScreenUiState())

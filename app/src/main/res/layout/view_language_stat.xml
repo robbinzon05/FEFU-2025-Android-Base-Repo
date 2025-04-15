@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:layout_marginEnd="8dp"
-        android:text="Язык" />
+        android:text="@string/flex_box_item_name" />
 
     <TextView
         android:id="@+id/tvLanguagePercent"

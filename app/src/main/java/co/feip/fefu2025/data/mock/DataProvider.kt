@@ -27,8 +27,9 @@ class DataProvider {
     }
 
     fun getStarredCards(): List<RepositoryCardModel> {
-        return List<RepositoryCardModel>(10) {
+        return List<RepositoryCardModel>(10) { index ->
             RepositoryCardModel(
+                id = index,
                 name = "ExampleGitLab.org/GitLab Community",
                 description = "GitLab Community Edition (CE) is a" +
                         "n open source end-to-end software developm" +
@@ -43,8 +44,9 @@ class DataProvider {
     }
 
     fun getAllCards(): List<RepositoryCardModel> {
-        return List<RepositoryCardModel>(20){
+        return List<RepositoryCardModel>(20){ index ->
             RepositoryCardModel(
+                id = index,
                 name = "ExampleGitLab.org/GitLab Community",
                 description = "GitLab Community Edition (CE) is a" +
                         "n open source end-to-end software developm" +
