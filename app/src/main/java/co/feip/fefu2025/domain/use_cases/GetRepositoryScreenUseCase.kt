@@ -6,7 +6,6 @@ import co.feip.fefu2025.domain.repository.RepositoryScreenRepository
 class GetRepositoryScreenUseCase(
     private val repository: RepositoryScreenRepository
 ) {
-    operator fun invoke(): RepositoryScreenModel {
-        return repository.getRepositoryScreen()
-    }
+    suspend operator fun invoke(cardId: Int): RepositoryScreenModel =
+        repository.getRepositoryScreen(cardId)
 }

@@ -1,29 +1,29 @@
-package co.feip.fefu2025.presentation.screen.starred
+package co.feip.fefu2025.presentation.screen.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.feip.fefu2025.domain.model.RepositoryCardModel
-import co.feip.fefu2025.domain.use_cases.GetStarredRepositoriesUseCase
+import co.feip.fefu2025.domain.use_cases.SearchRepositoriesUseCase
 import co.feip.fefu2025.presentation.util.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class StarredRepositoriesViewModel(
-    private val getStarred: GetStarredRepositoriesUseCase
+class SearchViewModel(
+    private val searchUseCase: SearchRepositoriesUseCase
 ) : ViewModel() {
 
     private val _uiState =
-        MutableStateFlow<UiState<List<RepositoryCardModel>>>(UiState.Loading)
+        MutableStateFlow<UiState<List<RepositoryCardModel>>>(UiState.Success(emptyList()))
     val uiState: StateFlow<UiState<List<RepositoryCardModel>>> = _uiState
 
-    init { load() }
-
-    fun retry() = load()
-
-    private fun load() = viewModelScope.launch {
+    fun onQueryChange(query: String) = viewModelScope.launch {
+        if (query.isBlank()) {
+            _uiState.value = UiState.Success(emptyList())
+            return@launch
+        }
         _uiState.value = UiState.Loading
-        runCatching { getStarred() }
+        runCatching { searchUseCase(query) }
             .onSuccess { _uiState.value = UiState.Success(it) }
             .onFailure { _uiState.value = UiState.Error(it) }
     }
