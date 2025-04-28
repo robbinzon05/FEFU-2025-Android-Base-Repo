@@ -1,40 +1,40 @@
 package co.feip.fefu2025.presentation.screen.main
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import co.feip.fefu2025.domain.model.RepositoryCardModel
 import co.feip.fefu2025.domain.use_cases.GetAllRepositoriesUseCase
 import co.feip.fefu2025.domain.use_cases.GetStarredRepositoriesUseCase
+import co.feip.fefu2025.presentation.util.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
-data class MainUIState(
-    val starredRepositories: List<RepositoryCardModel> = emptyList(),
-    val allRepositories: List<RepositoryCardModel> = emptyList(),
-    val isLoading: Boolean = false
+data class MainData(
+    val starred: List<RepositoryCardModel>,
+    val all: List<RepositoryCardModel>
 )
 
-class MainPageViewModel (
-    private val getStarredRepositoriesUseCase: GetStarredRepositoriesUseCase,
-    private val getAllRepositoriesUseCase: GetAllRepositoriesUseCase
-): ViewModel(){
+class MainPageViewModel(
+    private val getStarred: GetStarredRepositoriesUseCase,
+    private val getAll: GetAllRepositoriesUseCase
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(MainUIState())
-    val uiState: StateFlow<MainUIState> = _uiState
+    private val _uiState = MutableStateFlow<UiState<MainData>>(UiState.Loading)
+    val uiState: StateFlow<UiState<MainData>> = _uiState
 
-    init {
-        loadRepositories()
-    }
+    init { load() }
 
-    private fun loadRepositories() {
-        _uiState.value = _uiState.value.copy(isLoading = true)
+    fun retry() = load()
 
-        val starredRepos = getStarredRepositoriesUseCase()
-        val allRepos = getAllRepositoriesUseCase()
-
-        _uiState.value = MainUIState(
-            starredRepositories = starredRepos,
-            allRepositories = allRepos,
-            isLoading = false
-        )
+    private fun load() = viewModelScope.launch {
+        _uiState.value = UiState.Loading
+        runCatching {
+            MainData(
+                starred = getStarred(),
+                all = getAll()
+            )
+        }.onSuccess { _uiState.value = UiState.Success(it) }
+            .onFailure { _uiState.value = UiState.Error(it) }
     }
 }

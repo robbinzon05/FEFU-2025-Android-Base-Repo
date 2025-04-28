@@ -11,6 +11,8 @@ import co.feip.fefu2025.presentation.screen.main.MainPage
 import co.feip.fefu2025.presentation.screen.main.MainPageViewModel
 import co.feip.fefu2025.presentation.screen.repo.RepositoryScreen
 import co.feip.fefu2025.presentation.screen.repo.RepositoryScreenViewModel
+import co.feip.fefu2025.presentation.screen.search.SearchScreen
+import co.feip.fefu2025.presentation.screen.search.SearchViewModel
 import co.feip.fefu2025.presentation.screen.starred.StarredRepositoriesScreen
 import co.feip.fefu2025.presentation.screen.starred.StarredRepositoriesViewModel
 import org.koin.androidx.compose.getViewModel
@@ -18,22 +20,27 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun AppNavHost(
-    navHostController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navHostController: NavHostController
 ) {
     NavHost(
+        modifier = modifier,
         navController = navHostController,
-        startDestination = Destination.MainPage.route,
-        modifier = modifier
-    ){
+        startDestination = Destination.MainPage.route
+    ) {
         composable(Destination.MainPage.route) {
-            val viewModel : MainPageViewModel = getViewModel()
+            val viewModel: MainPageViewModel = getViewModel()
             MainPage(
                 viewModel = viewModel,
                 onRepoClick = { cardId ->
                     navHostController.navigate("${Destination.RepositoryCard.route}/$cardId")
                 },
-                onStarredClick = { navHostController.navigate(Destination.StarredRepositoriesPage.route) }
+                navToSearch = {
+                    navHostController.navigate(Destination.Search.route)
+                },
+                onStarredClick = {
+                    navHostController.navigate(Destination.StarredRepositoriesPage.route)
+                }
             )
         }
 
@@ -47,7 +54,8 @@ fun AppNavHost(
 
             val cardId = backStackEntry.arguments!!.getInt(ARG_CARD_ID)
 
-            val viewModel: RepositoryScreenViewModel = getViewModel(parameters = { parametersOf(cardId) })
+            val viewModel: RepositoryScreenViewModel =
+                getViewModel(parameters = { parametersOf(cardId) })
             RepositoryScreen(
                 viewModel = viewModel,
                 onBackClick = { navHostController.popBackStack() }
@@ -59,10 +67,22 @@ fun AppNavHost(
             StarredRepositoriesScreen(
                 viewModel = viewModel,
                 onBackClick = { navHostController.popBackStack() },
-                onRepoClick =  { cardId ->
+                onRepoClick = { cardId ->
                     navHostController.navigate("${Destination.RepositoryCard.route}/$cardId")
                 }
             )
         }
+
+        composable(Destination.Search.route) {
+            val vm: SearchViewModel = getViewModel()
+            SearchScreen(
+                viewModel = vm,
+                onBack = { navHostController.popBackStack() },
+                onRepoClick = { id ->
+                    navHostController.navigate("${Destination.RepositoryCard.route}/$id")
+                }
+            )
+        }
+
     }
 }

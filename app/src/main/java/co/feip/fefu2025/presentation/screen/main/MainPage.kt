@@ -1,28 +1,16 @@
 package co.feip.fefu2025.presentation.screen.main
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,89 +19,96 @@ import androidx.compose.ui.unit.sp
 import co.feip.fefu2025.R
 import co.feip.fefu2025.domain.model.RepositoryCardModel
 import co.feip.fefu2025.presentation.components.RepositoryCard
+import co.feip.fefu2025.presentation.util.UiState
 import co.feip.fefu2025.ui.theme.FEFU2025AndroidBaseRepoTheme
+
+
+data class MainUIState(
+    val starredRepositories: List<RepositoryCardModel> = emptyList(),
+    val allRepositories:     List<RepositoryCardModel> = emptyList(),
+    val isLoading: Boolean = false
+)
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainPageContent(
+    modifier: Modifier = Modifier,
     state: MainUIState,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     active: Boolean,
     onActiveChange: (Boolean) -> Unit,
     onRepoClick: (Int) -> Unit,
-    onStarredClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onStarredClick: () -> Unit
 ) {
-    if (state.isLoading) {
-        CircularProgressIndicator()
-    } else {
-        Scaffold(
-            topBar = {
-                SearchBar(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    query = searchQuery,
-                    onQueryChange = onSearchQueryChange,
-                    onSearch = { onActiveChange(false) },
-                    active = active,
-                    onActiveChange = onActiveChange,
-                    placeholder = { Text("Search repositories...") },
-                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                ) {
-                    if (searchQuery.isNotEmpty()) {
-                        Text(
-                            modifier = modifier.padding(16.dp),
-                            text = "Results for '$searchQuery'"
-                        )
-                    } else {
-                        Text(
-                            modifier = modifier.padding(16.dp),
-                            text = "Recently requests"
-                        )
-                    }
+    Scaffold(
+        topBar = {
+            SearchBar(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                query = searchQuery,
+                onQueryChange = onSearchQueryChange,
+                onSearch = { onActiveChange(false) },
+                active = active,
+                onActiveChange = onActiveChange,
+                placeholder = { Text("Search repositories…") },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+            ) {
+                if (searchQuery.isNotEmpty()) {
+                    Text(
+                        modifier = modifier.padding(16.dp),
+                        text = "Results for ‘$searchQuery’"
+                    )
+                } else {
+                    Text(
+                        modifier = modifier.padding(16.dp),
+                        text = "Recently requests"
+                    )
                 }
             }
-        ) { innerPadding ->
-            Column(modifier = modifier
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = modifier
                 .padding(innerPadding)
-                .fillMaxSize()) {
-                LazyColumn(
-                    modifier = modifier.padding(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    item {
-                        Text(
-                            modifier = modifier.clickable { onStarredClick() },
-                            text = "My stars",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 21.sp
-                        )
-                    }
-                    item {
-                        LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            items(state.starredRepositories) { cardInfo ->
-                                RepositoryCard(
-                                    cardInfo = cardInfo,
-                                    onClick = { onRepoClick(cardInfo.id) }
-                                )
-                            }
+                .fillMaxSize()
+        ) {
+            LazyColumn(
+                modifier = modifier.padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                item {
+                    Text(
+                        modifier = modifier.clickable { onStarredClick() },
+                        text = "My stars",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 21.sp
+                    )
+                }
+                item {
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        items(state.starredRepositories) { cardInfo ->
+                            RepositoryCard(
+                                cardInfo = cardInfo,
+                                onClick = { onRepoClick(cardInfo.id) }
+                            )
                         }
                     }
-                    item {
-                        Text(
-                            text = "All projects",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 21.sp
-                        )
-                    }
-                    items(state.allRepositories) { cardInfo ->
-                        RepositoryCard(
-                            cardInfo = cardInfo,
-                            onClick = { onRepoClick(cardInfo.id) }
-                        )
-                    }
+                }
+                item {
+                    Text(
+                        text = "All projects",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 21.sp
+                    )
+                }
+                items(state.allRepositories) { cardInfo ->
+                    RepositoryCard(
+                        cardInfo = cardInfo,
+                        onClick = { onRepoClick(cardInfo.id) }
+                    )
                 }
             }
         }
@@ -123,64 +118,74 @@ fun MainPageContent(
 @Composable
 fun MainPage(
     viewModel: MainPageViewModel,
+    navToSearch: () -> Unit,
     onRepoClick: (Int) -> Unit,
     onStarredClick: () -> Unit
 ) {
-    val state by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
-    var searchQuery by rememberSaveable { mutableStateOf("") }
-    var active by rememberSaveable { mutableStateOf(false) }
+    when (val state = uiState) {
+        UiState.Loading -> Box(Modifier.fillMaxSize(), Alignment.Center) {
+            CircularProgressIndicator()
+        }
 
-    MainPageContent(
-        modifier = Modifier,
-        state = state,
-        searchQuery = searchQuery,
-        onSearchQueryChange = { searchQuery = it },
-        active = active,
-        onActiveChange = { active = it },
-        onRepoClick = onRepoClick,
-        onStarredClick = onStarredClick
-    )
+        is UiState.Error -> Box(Modifier.fillMaxSize(), Alignment.Center) {
+            Button(onClick = viewModel::retry) { Text("Повторить") }
+        }
+
+        is UiState.Success -> {
+            val data = state.data
+            var searchQuery by rememberSaveable { mutableStateOf("") }
+
+            MainPageContent(
+                modifier = Modifier,
+                state = MainUIState(
+                    starredRepositories = data.starred,
+                    allRepositories = data.all,
+                    isLoading = false
+                ),
+                searchQuery = searchQuery,
+                onSearchQueryChange = { searchQuery = it },
+                active = false,
+                onActiveChange = { if (it) navToSearch() },
+                onRepoClick = onRepoClick,
+                onStarredClick = onStarredClick
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun MainPagePreview() {
-    val onRepoClick: (Int) -> Unit = { id -> println("Clicked repo with id = $id") }
+    val onRepoClick: (Int) -> Unit = {}
     val onStarredClick = {}
 
     FEFU2025AndroidBaseRepoTheme {
         val previewState = MainUIState(
-            starredRepositories = List<RepositoryCardModel>(10) { index ->
+            starredRepositories = List(3) { index ->
                 RepositoryCardModel(
                     id = index,
-                    name = "ExampleGitLab.org/GitLab Community",
-                    description = "GitLab Community Edition (CE) is a" +
-                            "n open source end-to-end software developm" +
-                            "ent platform with built-in version control, " +
-                            "issue tracking, code review, CI/CD, and more." +
-                            " Self-host GitLab CE on your own servers, in a container, or on a cloud provider",
-                    forks = 4774,
-                    stars = 5407,
+                    name = "Repo $index",
+                    description = "Description $index",
+                    forks = 40,
+                    stars = 100,
                     icon = R.drawable.ic_launcher_foreground
                 )
             },
-            allRepositories = List<RepositoryCardModel>(20) { index ->
+            allRepositories = List(5) { index ->
                 RepositoryCardModel(
                     id = index,
-                    name = "ExampleGitLab.org/GitLab Community",
-                    description = "GitLab Community Edition (CE) is a" +
-                            "n open source end-to-end software developm" +
-                            "ent platform with built-in version control, " +
-                            "issue tracking, code review, CI/CD, and more." +
-                            " Self-host GitLab CE on your own servers, in a container, or on a cloud provider",
-                    forks = 4774,
-                    stars = 5407,
+                    name = "Repo $index",
+                    description = "Description $index",
+                    forks = 40,
+                    stars = 100,
                     icon = R.drawable.ic_launcher_foreground
                 )
             },
             isLoading = false
         )
+
         MainPageContent(
             modifier = Modifier,
             state = previewState,
