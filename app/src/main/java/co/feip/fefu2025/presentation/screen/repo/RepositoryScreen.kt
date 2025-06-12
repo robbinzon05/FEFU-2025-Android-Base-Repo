@@ -10,18 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import co.feip.fefu2025.R
-import co.feip.fefu2025.domain.model.LanguageModel
-import co.feip.fefu2025.domain.model.RepositoryScreenModel
-import co.feip.fefu2025.presentation.components.LanguageItemView
-import co.feip.fefu2025.presentation.components.LanguageLine
-import co.feip.fefu2025.presentation.components.MyFlexBoxLayout
 import co.feip.fefu2025.presentation.util.UiState
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RepositoryScreen(
     viewModel: RepositoryScreenViewModel,
@@ -29,156 +22,74 @@ fun RepositoryScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    when (val state = uiState) {
+    when (val st = uiState) {
+        UiState.Loading -> Box(Modifier.fillMaxSize(), Alignment.Center) {
+            CircularProgressIndicator()
+        }
 
-        UiState.Loading -> Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) { CircularProgressIndicator() }
-
-        is UiState.Error -> Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Button(onClick = viewModel::retry) {
-                Text("Повторить")
-            }
+        is UiState.Error -> Box(Modifier.fillMaxSize(), Alignment.Center) {
+            Button(onClick = viewModel::retry) { Text("Retry") }
         }
 
         is UiState.Success -> {
-            RepositoryScreenContent(
-                repoScreen = state.data,
-                onBackClick = onBackClick
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun RepositoryScreenContent(
-    repoScreen: RepositoryScreenModel,
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = {},
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = null)
-                    }
-                }
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = modifier
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    modifier = modifier.size(60.dp),
-                    painter = painterResource(repoScreen.icon),
-                    contentDescription = null
-                )
-                Column {
-                    Text(repoScreen.name, style = MaterialTheme.typography.titleMedium)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            modifier = modifier.size(20.dp),
-                            painter = painterResource(R.drawable.git_fork_svgrepo_com),
-                            contentDescription = null
-                        )
-                        Text(repoScreen.forks.toString())
-                        Spacer(modifier = modifier.width(8.dp))
-                        Icon(
-                            modifier = modifier.size(18.dp),
-                            painter = painterResource(R.drawable.star_svgrepo_com),
-                            contentDescription = null
-                        )
-                        Spacer(modifier = modifier.width(6.dp))
-                        Text(repoScreen.stars.toString())
-                        Spacer(modifier = modifier.width(20.dp))
-                        Text(
-                            text = repoScreen.dataCreate,
-                            style = MaterialTheme.typography.bodySmall,
-                            fontWeight = FontWeight.W300,
-                            fontStyle = FontStyle.Italic
-                        )
-                    }
-                }
-            }
-            Spacer(modifier = modifier.height(8.dp))
-
-            Text(repoScreen.description, style = MaterialTheme.typography.bodyMedium)
-            Spacer(modifier = modifier.height(8.dp))
-
-            Text(
-                text = "Languages:",
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.W900
-            )
-            LanguageLine(languages = repoScreen.languages)
-
-            FlexBoxLanguages(languages = repoScreen.languages)
-        }
-    }
-}
-
-@Composable
-fun FlexBoxLanguages(
-    modifier: Modifier = Modifier,
-    languages: List<LanguageModel>
-) {
-    AndroidView(
-        modifier = modifier.fillMaxWidth(),
-        factory = { context ->
-            MyFlexBoxLayout(context).apply {
-                languages.forEach { lang ->
-                    addView(
-                        LanguageItemView(context).apply {
-                            setLanguageName(lang.name)
-                            setCircleColor(lang.color)
-                            setUsagePercent(lang.percent)
+            val repo = st.data
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = {},
+                        navigationIcon = {
+                            IconButton(onClick = onBackClick) {
+                                Icon(Icons.Default.ArrowBack, null)
+                            }
                         }
                     )
                 }
-            }
-        },
-        update = { view ->
-            view.removeAllViews()
-            languages.forEach { lang ->
-                view.addView(
-                    LanguageItemView(view.context).apply {
-                        setLanguageName(lang.name)
-                        setCircleColor(lang.color)
-                        setUsagePercent(lang.percent)
+            ) { pad ->
+                Column(
+                    Modifier
+                        .padding(pad)
+                        .padding(16.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_launcher_foreground),
+                            contentDescription = null,
+                            modifier = Modifier.size(60.dp)
+                        )
+                        Spacer(Modifier.width(12.dp))
+                        Column {
+                            Text(repo.name, style = MaterialTheme.typography.titleMedium)
+                            Spacer(Modifier.height(4.dp))
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    painterResource(R.drawable.git_fork_svgrepo_com),
+                                    null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(Modifier.width(4.dp))
+                                Text(repo.forks.toString())
+                                Spacer(Modifier.width(12.dp))
+                                Icon(
+                                    painterResource(R.drawable.star_svgrepo_com),
+                                    null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(Modifier.width(4.dp))
+                                Text(repo.stars.toString())
+                            }
+                        }
                     }
-                )
+                    Spacer(Modifier.height(12.dp))
+                    Text(repo.description, style = MaterialTheme.typography.bodyMedium)
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        "Created: ${repo.dataCreate}",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontStyle = FontStyle.Italic,
+                        fontWeight = FontWeight.W300
+                    )
+                }
             }
         }
-    )
-}
-
-
-@Preview(showBackground = true)
-@Composable
-private fun RepoScreenContentPreview() {
-    val fakeRepo = RepositoryScreenModel(
-        name = "ExampleGitLab.org/GitLab Community",
-        description = "GitLab Community Edition (CE) …",
-        dataCreate = "2025-03-25",
-        forks = 4774,
-        stars = 5407,
-        icon = R.drawable.ic_launcher_foreground,
-        languages = listOf(
-            LanguageModel("Kotlin", 70f, 0xFF7F52FF),
-            LanguageModel("XML", 30f, 0xFFFFC107)
-        )
-    )
-    RepositoryScreenContent(repoScreen = fakeRepo, onBackClick = {})
+    }
 }

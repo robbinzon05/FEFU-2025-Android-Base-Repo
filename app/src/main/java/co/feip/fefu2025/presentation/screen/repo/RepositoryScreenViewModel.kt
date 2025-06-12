@@ -14,8 +14,8 @@ class RepositoryScreenViewModel(
     private val cardId: Int
 ) : ViewModel() {
 
-    private val _uiState =
-        MutableStateFlow<UiState<RepositoryScreenModel>>(UiState.Loading)
+    private val _uiState: MutableStateFlow<UiState<RepositoryScreenModel>> =
+        MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState<RepositoryScreenModel>> = _uiState
 
     init { load() }

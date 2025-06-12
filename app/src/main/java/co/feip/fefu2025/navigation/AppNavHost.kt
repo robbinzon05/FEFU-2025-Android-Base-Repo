@@ -28,61 +28,46 @@ fun AppNavHost(
         navController = navHostController,
         startDestination = Destination.MainPage.route
     ) {
+
         composable(Destination.MainPage.route) {
-            val viewModel: MainPageViewModel = getViewModel()
+            val vm: MainPageViewModel = getViewModel()
             MainPage(
-                viewModel = viewModel,
-                onRepoClick = { cardId ->
-                    navHostController.navigate("${Destination.RepositoryCard.route}/$cardId")
-                },
-                navToSearch = {
-                    navHostController.navigate(Destination.Search.route)
-                },
-                onStarredClick = {
-                    navHostController.navigate(Destination.StarredRepositoriesPage.route)
-                }
+                viewModel       = vm,
+                navToSearch     = { navHostController.navigate(Destination.Search.route) },
+                onRepoClick     = { id -> navHostController.navigate("${Destination.RepositoryCard.route}/$id") },
+                onStarredClick  = { navHostController.navigate(Destination.StarredRepositoriesPage.route) }
             )
         }
 
         composable(
-            route = Destination.RepositoryCard.routeWithArgs,
-            arguments = Destination.RepositoryCard.arguments,
-            deepLinks = listOf(
-                navDeepLink { uriPattern = "mysuperapp://repo/{$ARG_CARD_ID}" }
-            )
-        ) { backStackEntry ->
-
-            val cardId = backStackEntry.arguments!!.getInt(ARG_CARD_ID)
-
-            val viewModel: RepositoryScreenViewModel =
-                getViewModel(parameters = { parametersOf(cardId) })
+            route      = Destination.RepositoryCard.routeWithArgs,
+            arguments   = Destination.RepositoryCard.arguments,
+            deepLinks   = listOf(navDeepLink { uriPattern = "mysuperapp://repo/{$ARG_CARD_ID}" })
+        ) { back ->
+            val id = back.arguments!!.getInt(ARG_CARD_ID)
+            val vm: RepositoryScreenViewModel = getViewModel { parametersOf(id) }
             RepositoryScreen(
-                viewModel = viewModel,
+                viewModel   = vm,
                 onBackClick = { navHostController.popBackStack() }
             )
         }
 
         composable(Destination.StarredRepositoriesPage.route) {
-            val viewModel: StarredRepositoriesViewModel = getViewModel()
+            val vm: StarredRepositoriesViewModel = getViewModel()
             StarredRepositoriesScreen(
-                viewModel = viewModel,
-                onBackClick = { navHostController.popBackStack() },
-                onRepoClick = { cardId ->
-                    navHostController.navigate("${Destination.RepositoryCard.route}/$cardId")
-                }
+                viewModel  = vm,
+                onBack     = { navHostController.popBackStack() },
+                onRepoClick = { id -> navHostController.navigate("${Destination.RepositoryCard.route}/$id") }
             )
         }
 
         composable(Destination.Search.route) {
             val vm: SearchViewModel = getViewModel()
             SearchScreen(
-                viewModel = vm,
-                onBack = { navHostController.popBackStack() },
-                onRepoClick = { id ->
-                    navHostController.navigate("${Destination.RepositoryCard.route}/$id")
-                }
+                viewModel   = vm,
+                onBack      = { navHostController.popBackStack() },
+                onRepoClick = { id -> navHostController.navigate("${Destination.RepositoryCard.route}/$id") }
             )
         }
-
     }
 }

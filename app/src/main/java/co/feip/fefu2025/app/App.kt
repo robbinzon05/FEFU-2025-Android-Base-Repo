@@ -1,6 +1,6 @@
 package co.feip.fefu2025.app
 import android.app.Application
-import appModule
+import co.feip.fefu2025.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
