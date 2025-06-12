@@ -43,6 +43,11 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.okhttp)
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.retrofit2.retrofit)
+    implementation(libs.retrofit2.converter.gson)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

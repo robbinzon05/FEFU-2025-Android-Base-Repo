@@ -1,11 +1,11 @@
 package co.feip.fefu2025.domain.use_cases
 
 import co.feip.fefu2025.domain.model.RepositoryCardModel
-import co.feip.fefu2025.domain.repository.RepositoryCardRepository
+import co.feip.fefu2025.domain.repository.ProjectRepository
 
 class SearchRepositoriesUseCase(
-    private val repository: RepositoryCardRepository
+    private val repo: ProjectRepository
 ) {
     suspend operator fun invoke(query: String): List<RepositoryCardModel> =
-        repository.searchRepositories(query)
+        repo.search(query)
 }
